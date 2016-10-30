@@ -30,6 +30,14 @@ public class OcfDevice {
         return mOcfDeviceVariableList;
     }
 
+    public OcfDeviceVariable variable(String resource){
+        for(OcfDeviceVariable var: mOcfDeviceVariableList){
+            if (var.getHref().equals(resource)){
+                return var;
+            }
+        }
+        return null;
+    }
 
     public native void get(String href, OcfDeviceVariableCallback callback);
     public native void observe(String href, OcfDeviceVariableCallback callback);
