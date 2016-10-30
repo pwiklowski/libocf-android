@@ -1,5 +1,7 @@
 package com.wiklosoft.ocf;
 
+import org.json.JSONObject;
+
 /**
  * Created by Pawel Wiklowski on 05.04.16.
  */
@@ -7,7 +9,7 @@ public class OcfDeviceVariable {
     private String miff;
     private String mResourceType;
     private String mHref;
-    private String mValue;
+    private JSONObject mValue;
 
     public OcfDeviceVariable(String iff, String href, String rt){
         miff= iff;
@@ -23,11 +25,11 @@ public class OcfDeviceVariable {
         return mResourceType;
     }
 
-    public String getValue(){
+    public JSONObject getValue(){
         return mValue;
     }
 
-    public void setValue(String value){
+    public void setValue(JSONObject value){
         mValue = value;
     }
 
