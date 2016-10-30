@@ -39,7 +39,7 @@ public class OcfControlPoint {
     }
     //Do not touch it, method called from JNI
     private void deviceFound(OcfDevice dev){
-        Log.d(TAG, "deviceFound " + dev);
+        Log.d(TAG, "deviceFound " + dev.getName() + " " + dev.getDi());
         mDevices.add(dev);
 
         for(int i=0;i<mOcfOnDeviceFoundList.size(); i++){
