@@ -245,7 +245,10 @@ void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstrin
                 cbor cborResponse;
                 cbor::parse(&cborResponse, response->getPayload());
                 String cborString = cbor::toJsonString(&cborResponse);
-                m_env->CallVoidMethod(globalCallback, callbackID, m_env->NewStringUTF(cborString.c_str()));
+
+                jstring cborJstring = m_env->NewStringUTF(cborString.c_str());
+                m_env->CallVoidMethod(globalCallback, callbackID, cborJstring);
+                m_env->DeleteLocalRef(cborJstring);
             });
         }
     }
