@@ -120,7 +120,6 @@ void Java_com_wiklosoft_ocf_OcfControlPoint_init( JNIEnv* env, jobject thiz)
 }
 void Java_com_wiklosoft_ocf_OcfDevice_get( JNIEnv* env, jobject thiz, jstring hrefTmp, jobject callbackObject)
 {
-    m_jvm->AttachCurrentThread(&m_env, NULL);
     log("get");
     String di;
     String href;
@@ -175,7 +174,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_get( JNIEnv* env, jobject thiz, jstring hr
 
 void Java_com_wiklosoft_ocf_OcfDevice_unobserve( JNIEnv* env, jobject thiz, jstring hrefTmp, jobject callbackObject)
 {
-    m_jvm->AttachCurrentThread(&m_env, NULL);
     String di;
     String href;
 
@@ -213,7 +211,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_unobserve( JNIEnv* env, jobject thiz, jstr
 
 void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstring hrefTmp, jobject callbackObject)
 {
-    m_jvm->AttachCurrentThread(&m_env, NULL);
     String di;
     String href;
 
@@ -259,8 +256,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstrin
 }
 void Java_com_wiklosoft_ocf_OcfDevice_post( JNIEnv* env, jobject thiz, jstring hrefTmp, jstring jsonString, jobject callbackObject)
 {
-    m_jvm->AttachCurrentThread(&m_env, NULL);
-    log("post");
     String di;
     String href;
     String value;
