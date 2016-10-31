@@ -150,13 +150,9 @@ void Java_com_wiklosoft_ocf_OcfDevice_get( JNIEnv* env, jobject thiz, jstring hr
     if (dev != 0){
         OICDeviceResource* res = getDeviceResource(dev, href);
         if (res != 0){
-
-            __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "get %d", callbackObject);
-            __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "get %d", callbackObject);
             jobject globalCallback = env->NewGlobalRef(callbackObject);
 
             res->get([=] (COAPPacket* response){
-                log("get response");
                 m_jvm->AttachCurrentThread(&m_env, NULL);
                 jmethodID callbackID = m_env->GetMethodID(m_OcfDeviceVariableCallbackClass, "update", "(Ljava/lang/String;)V");
                 cbor cborResponse;
@@ -239,7 +235,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstrin
         if (res != 0){
             jobject globalCallback = env->NewGlobalRef(callbackObject); //TODO: delete it later afetr unoberve is called
             res->observe([=] (COAPPacket* response){
-                log("observe response");
                 if (response != 0) {
                     m_jvm->AttachCurrentThread(&m_env, NULL);
 
@@ -257,6 +252,7 @@ void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstrin
         }
     }
 }
+
 void Java_com_wiklosoft_ocf_OcfDevice_post( JNIEnv* env, jobject thiz, jstring hrefTmp, jstring jsonString, jobject callbackObject)
 {
     String di;
@@ -288,7 +284,7 @@ void Java_com_wiklosoft_ocf_OcfDevice_post( JNIEnv* env, jobject thiz, jstring h
     di.append(diChars);
     env->ReleaseStringUTFChars(diFieldValue, diChars);
 
-    __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "post %s %s %s",di.c_str(), href.c_str(), value.c_str());
+    log("post %s %s %s",di.c_str(), href.c_str(), value.c_str());
 
     cbor v;
     v.parse_value(value.c_str());
@@ -300,7 +296,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_post( JNIEnv* env, jobject thiz, jstring h
             jobject globalCallback = env->NewGlobalRef(callbackObject);
 
             res->post(v, [=] (COAPPacket* response){
-                log("post response");
                 m_jvm->AttachCurrentThread(&m_env, NULL);
                 if (response != 0){
                     jmethodID callbackID = m_env->GetMethodID(m_OcfDeviceVariableCallbackClass, "update", "(Ljava/lang/String;)V");
