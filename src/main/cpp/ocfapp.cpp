@@ -152,8 +152,8 @@ void Java_com_wiklosoft_ocf_OcfDevice_get( JNIEnv* env, jobject thiz, jstring hr
         if (res != 0){
 
             __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "get %d", callbackObject);
-            jobject globalCallback = m_env->NewGlobalRef(callbackObject);
             __android_log_print(ANDROID_LOG_VERBOSE, APPNAME, "get %d", callbackObject);
+            jobject globalCallback = env->NewGlobalRef(callbackObject);
 
             res->get([=] (COAPPacket* response){
                 log("get response");
@@ -239,8 +239,7 @@ void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstrin
     if (dev != 0){
         OICDeviceResource* res = getDeviceResource(dev, href);
         if (res != 0){
-            jobject globalCallback = m_env->NewGlobalRef(callbackObject); //TODO: delete it later afetr unoberve is called
-
+            jobject globalCallback = env->NewGlobalRef(callbackObject); //TODO: delete it later afetr unoberve is called
             res->observe([=] (COAPPacket* response){
                 log("observe response");
                 m_jvm->AttachCurrentThread(&m_env, NULL);
@@ -294,7 +293,7 @@ void Java_com_wiklosoft_ocf_OcfDevice_post( JNIEnv* env, jobject thiz, jstring h
     if (dev != 0){
         OICDeviceResource* res = getDeviceResource(dev, href);
         if (res != 0){
-            jobject globalCallback = m_env->NewGlobalRef(callbackObject);
+            jobject globalCallback = env->NewGlobalRef(callbackObject);
 
             res->post(v, [=] (COAPPacket* response){
                 log("post response");
