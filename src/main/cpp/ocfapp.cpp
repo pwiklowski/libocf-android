@@ -164,8 +164,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_get( JNIEnv* env, jobject thiz, jstring hr
                 String cborString = cbor::toJsonString(&cborResponse);
                 m_env->CallVoidMethod(globalCallback, callbackID, m_env->NewStringUTF(cborString.c_str()));
                 m_env->DeleteGlobalRef(globalCallback);
-
-                m_jvm->DetachCurrentThread();
             });
         }
     }
@@ -248,7 +246,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstrin
                 cbor::parse(&cborResponse, response->getPayload());
                 String cborString = cbor::toJsonString(&cborResponse);
                 m_env->CallVoidMethod(globalCallback, callbackID, m_env->NewStringUTF(cborString.c_str()));
-                m_jvm->DetachCurrentThread();
             });
         }
     }
@@ -301,7 +298,6 @@ void Java_com_wiklosoft_ocf_OcfDevice_post( JNIEnv* env, jobject thiz, jstring h
                 jmethodID callbackID = m_env->GetMethodID(m_OcfDeviceVariableCallbackClass, "update", "(Ljava/lang/String;)V");
                 m_env->CallVoidMethod(globalCallback, callbackID, 0);
                 m_env->DeleteGlobalRef(globalCallback);
-                m_jvm->DetachCurrentThread();
             });
         }
     }
