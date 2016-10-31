@@ -240,15 +240,19 @@ void Java_com_wiklosoft_ocf_OcfDevice_observe( JNIEnv* env, jobject thiz, jstrin
             jobject globalCallback = env->NewGlobalRef(callbackObject); //TODO: delete it later afetr unoberve is called
             res->observe([=] (COAPPacket* response){
                 log("observe response");
-                m_jvm->AttachCurrentThread(&m_env, NULL);
-                jmethodID callbackID = m_env->GetMethodID(m_OcfDeviceVariableCallbackClass, "update", "(Ljava/lang/String;)V");
-                cbor cborResponse;
-                cbor::parse(&cborResponse, response->getPayload());
-                String cborString = cbor::toJsonString(&cborResponse);
+                if (response != 0) {
+                    m_jvm->AttachCurrentThread(&m_env, NULL);
 
-                jstring cborJstring = m_env->NewStringUTF(cborString.c_str());
-                m_env->CallVoidMethod(globalCallback, callbackID, cborJstring);
-                m_env->DeleteLocalRef(cborJstring);
+                    jmethodID callbackID = m_env->GetMethodID(m_OcfDeviceVariableCallbackClass, "update", "(Ljava/lang/String;)V");
+
+                    cbor cborResponse;
+                    cbor::parse(&cborResponse, response->getPayload());
+                    String cborString = cbor::toJsonString(&cborResponse);
+
+                    jstring cborJstring = m_env->NewStringUTF(cborString.c_str());
+                    m_env->CallVoidMethod(globalCallback, callbackID, cborJstring);
+                    m_env->DeleteLocalRef(cborJstring);
+                }
             });
         }
     }
@@ -298,8 +302,10 @@ void Java_com_wiklosoft_ocf_OcfDevice_post( JNIEnv* env, jobject thiz, jstring h
             res->post(v, [=] (COAPPacket* response){
                 log("post response");
                 m_jvm->AttachCurrentThread(&m_env, NULL);
-                jmethodID callbackID = m_env->GetMethodID(m_OcfDeviceVariableCallbackClass, "update", "(Ljava/lang/String;)V");
-                m_env->CallVoidMethod(globalCallback, callbackID, 0);
+                if (response != 0){
+                    jmethodID callbackID = m_env->GetMethodID(m_OcfDeviceVariableCallbackClass, "update", "(Ljava/lang/String;)V");
+                    m_env->CallVoidMethod(globalCallback, callbackID, 0);
+                }
                 m_env->DeleteGlobalRef(globalCallback);
             });
         }
